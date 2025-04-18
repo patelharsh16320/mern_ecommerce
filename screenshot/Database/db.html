@@ -1,0 +1,325 @@
+<!--! db -- 'www_ecommerse_com' -->
+<!--? 1st -- 'product' -->
+id-int(pk)
+name - varchar
+desc - text
+sku -varchar
+category_id - int(fk)
+inventory_id - int(fk)
+price - decimal
+discount_id -int (fk)
+created_at - timestamp
+modified_at - timestamp
+deleted_at - timestamp
+
+<!--? 2nd -- 'product_catogory' -->
+id-int(pk) -- connected to table 'product' - category_id (fk)
+name - varchar
+desc - text
+created_at - timestamp
+modified_at - timestamp
+deleted_at - timestamp
+
+<!--? 3rd -- 'product_inventory' -->
+id-int(pk) -- connected to table 'product' - inventory_id (fk)
+quantity-int
+created_at - timestamp
+modified_at - timestamp
+deleted_at - timestamp
+
+<!--? 4th -- 'product_discount' -->
+id-int(pk) -- connected to table 'product' - discount_id (fk)
+name - varchar
+desc - text
+discount_percent - text
+active - boolean
+created_at - timestamp
+modified_at - timestamp
+deleted_at - timestamp
+
+<!--? 5th -- 'user' -->
+id - int(pk)
+username - varchar
+password - text
+first_name - decimal
+last_name - varchar
+mobile - int
+created_at - timestamp
+modified_at - timestamp
+
+<!--? 6th -- 'user_address' -->
+id-int (pk)
+user_id - int (fk) connected to table 'user' - id (pk)
+address_line1 - varchar
+address_line2 - varchar
+city - varchar
+postal_code - varchar
+country - varchar
+mobile - varchar
+
+<!--? 7th -- 'user_payment' -->
+id-int (pk)
+user_id - int (fk)
+payment_type - varchar
+provider - varchar
+account_no - int
+expiry - date
+
+<!--? 8th -- 'shopping_session' -->
+id - int (pk)
+user_id - varchar -- connected to 'user' ->id(pk)
+total - decimal
+created_at - timestamp
+modified_at - timestamp
+
+<!--? 9th -- 'cart_item' -->
+id - int (pk)
+session_id - int -- connected to 'shopping_session' ->id(pk)
+production_id - int -- connected to 'user' ->id(pk)
+created_at - timestamp
+modified_at - timestamp
+
+<!--? 10th -- 'payment_details' -->
+id - int (pk)
+order_id - id
+amoumt - int
+provider - varchar
+status - varchar
+created_at - timestamp
+modified_at - timestamp
+
+<!--? 11th -- 'order_details' -->
+id - int (pk) - -- connected to 'payment_details' -> id(pk)
+user_id - varchar -- connected to 'user' -> id(pk)
+total - decimal
+payment_id - int -- connected to 'payment_details' -> id(pk)
+created_at - timestamp
+modified_at - timestamp
+
+<!--? 12th -- 'order_items' -->
+id - int (pk)
+order_id - int -- connected to 'order_details' -> id(pk)
+product_id - int -- connected to 'product' -> id(pk)
+quantity - int
+created_at - timestamp
+modified_at - timestamp
+
+
+
+
+<!-- query  -->
+-- Make sure you're using the correct database
+USE www_ecommerse_com;
+
+<!--! Table Create product_category -->
+CREATE TABLE product_category (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    `desc` TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL
+);
+
+<!--! Table Create product_inventory -->
+CREATE TABLE product_inventory (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    quantity INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL
+);
+
+<!--! Table Create product_discount -->
+CREATE TABLE product_discount (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    `desc` TEXT,
+    discount_percent TEXT,
+    active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL
+);
+
+<!--! Table Create product -->
+CREATE TABLE product (
+    id INT PRIMARY KEY,
+    title VARCHAR(255),
+    price DECIMAL(10,2),
+    description TEXT,
+    category VARCHAR(100),
+    image TEXT,
+    rating_rate DECIMAL(3,1),
+    rating_count INT,
+    category_id INT,
+    inventory_id INT,
+    discount_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    FOREIGN KEY (category_id) REFERENCES product_category(id),
+    FOREIGN KEY (inventory_id) REFERENCES product_inventory(id),
+    FOREIGN KEY (discount_id) REFERENCES product_discount(id)
+);
+
+
+<!--! Table Create user -->
+CREATE TABLE user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255),
+    password TEXT,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    mobile VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+<!--! Table Create user_address -->
+CREATE TABLE user_address (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    address_line1 VARCHAR(255),
+    address_line2 VARCHAR(255),
+    city VARCHAR(100),
+    postal_code VARCHAR(20),
+    country VARCHAR(100),
+    mobile VARCHAR(20),
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
+
+<!--! Table Create user_payment -->
+CREATE TABLE user_payment (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    payment_type VARCHAR(100),
+    provider VARCHAR(100),
+    account_no BIGINT,
+    expiry DATE,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
+
+<!--! Table Create shopping_session -->
+CREATE TABLE shopping_session (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    total DECIMAL(10,2),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
+
+<!--! Table Create cart_item -->
+CREATE TABLE cart_item (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    session_id INT,
+    product_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (session_id) REFERENCES shopping_session(id),
+    FOREIGN KEY (product_id) REFERENCES product(id)
+);
+
+<!--! Table Create payment_details -->
+CREATE TABLE payment_details (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    amount DECIMAL(10,2),
+    provider VARCHAR(100),
+    status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+<!--! Table Create order_details -->
+CREATE TABLE order_details (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    total DECIMAL(10,2),
+    payment_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (payment_id) REFERENCES payment_details(id)
+);
+
+<!--! Table Create order_items -->
+CREATE TABLE order_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    product_id INT,
+    quantity INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES order_details(id),
+    FOREIGN KEY (product_id) REFERENCES product(id)
+);
+
+
+<!-- dummy data  -->
+-- Insert into product_category
+INSERT INTO product_category (name, `desc`) VALUES
+('Electronics', 'Electronic gadgets and devices'),
+('Clothing', 'Men and Women Clothing'),
+('Books', 'Educational and story books');
+
+-- Insert into product_inventory
+INSERT INTO product_inventory (quantity) VALUES
+(100),
+(50),
+(200);
+
+-- Insert into product_discount
+INSERT INTO product_discount (name, `desc`, discount_percent, active) VALUES
+('Summer Sale', '10% off on all items', '10%', TRUE),
+('New User', '5% discount for new users', '5%', TRUE),
+('Black Friday', '20% discount', '20%', FALSE);
+
+-- Insert into product
+INSERT INTO product (name, `desc`, sku, category_id, inventory_id, price, discount_id) VALUES
+('Smartphone', 'Latest Android smartphone', 'SMRT123', 1, 1, 299.99, 1),
+('Jeans', 'Blue denim jeans', 'JNS456', 2, 2, 49.99, 2),
+('Book', 'Science fiction novel', 'BK789', 3, 3, 19.99, 3);
+
+-- Insert into user
+INSERT INTO user (username, password, first_name, last_name, mobile) VALUES
+('jdoe', 'pass123', 'John', 'Doe', '9876543210'),
+('asmith', 'pass456', 'Alice', 'Smith', '8765432109');
+
+-- Insert into user_address
+INSERT INTO user_address (user_id, address_line1, address_line2, city, postal_code, country, mobile) VALUES
+(1, '123 Main St', 'Apt 4', 'New York', '10001', 'USA', '9876543210'),
+(2, '456 Side Rd', '', 'Los Angeles', '90001', 'USA', '8765432109');
+
+-- Insert into user_payment
+INSERT INTO user_payment (user_id, payment_type, provider, account_no, expiry) VALUES
+(1, 'Credit Card', 'Visa', 1234567890123456, '2026-05-01'),
+(2, 'Debit Card', 'MasterCard', 9876543210987654, '2025-12-31');
+
+-- Insert into shopping_session
+INSERT INTO shopping_session (user_id, total) VALUES
+(1, 349.98),
+(2, 19.99);
+
+-- Insert into cart_item
+INSERT INTO cart_item (session_id, product_id) VALUES
+(1, 1),
+(1, 2),
+(2, 3);
+
+-- Insert into payment_details
+INSERT INTO payment_details (order_id, amount, provider, status) VALUES
+(1, 349.98, 'Visa', 'Paid'),
+(2, 19.99, 'MasterCard', 'Pending');
+
+-- Insert into order_details
+INSERT INTO order_details (user_id, total, payment_id) VALUES
+(1, 349.98, 1),
+(2, 19.99, 2);
+
+-- Insert into order_items
+INSERT INTO order_items (order_id, product_id, quantity) VALUES
+(1, 1, 1),
+(1, 2, 1),
+(2, 3, 1);
