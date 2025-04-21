@@ -2,7 +2,10 @@ import React from 'react'
 
 const Checkout = () => {
   return (
-    <>Checkout</>
+    <>
+      <section id='main' className='container pb-5'>
+        Checkout
+      </section></>
   )
 }
 

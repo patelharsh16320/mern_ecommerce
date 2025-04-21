@@ -51,7 +51,7 @@ const Cart = () => {
   };
 
   return (
-    <section className='cart-page'>
+    <section id='main' className='cart-page'>
       <h2>🛒 Your Cart</h2>
       {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>

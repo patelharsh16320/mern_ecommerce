@@ -110,3 +110,17 @@
 2025-04-18 16:31:48 [INFO]: POST /create-product-category - 201 - 10ms
 2025-04-18 16:31:53 [INFO]: GET /show-product_category - 201 - 35ms
 2025-04-18 16:31:53 [INFO]: GET /show-product_category - 201 - 4ms
+2025-04-18 17:32:14 [INFO]: GET /show-product - 201 - 35ms
+2025-04-18 17:32:14 [INFO]: GET /show-product - 201 - 6ms
+2025-04-18 17:32:18 [INFO]: GET /show-product_category - 201 - 7ms
+2025-04-18 17:32:18 [INFO]: GET /show-product_category - 201 - 2ms
+2025-04-18 17:45:36 [INFO]: GET /show-product_category - 201 - 114ms
+2025-04-18 17:45:36 [INFO]: GET /show-product_category - 201 - 4ms
+2025-04-18 17:47:25 [INFO]: GET /show-product - 201 - 35ms
+2025-04-18 17:47:25 [INFO]: GET /show-product - 201 - 44ms
+2025-04-18 17:47:28 [INFO]: GET /show-product_category - 201 - 4ms
+2025-04-18 17:47:28 [INFO]: GET /show-product_category - 201 - 2ms
+2025-04-18 17:47:42 [INFO]: GET /show-product - 201 - 5ms
+2025-04-18 17:47:42 [INFO]: GET /show-product - 201 - 5ms
+2025-04-18 17:47:47 [INFO]: GET /show-product - 201 - 5ms
+2025-04-18 17:47:47 [INFO]: GET /show-product - 201 - 4ms

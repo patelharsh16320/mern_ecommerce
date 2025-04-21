@@ -35,7 +35,6 @@ const createProduct = async (req, res) => {
 const createProductCategory = async (req, res) => {
     try {
         const { name, desc } = req.body;
-        console.log(req.body);
         const query = `INSERT INTO product_category (name, \`desc\`, created_at, modified_at) VALUES (?,?,NOW(),NOW())`;
 
         const [result] = await conn.promise().query(query, [name, desc]);

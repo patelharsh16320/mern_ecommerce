@@ -40,7 +40,7 @@ const MyAccount = () => {
 
     return (
         <>
-            <section id='main' className="container d-flex">
+            <section id='main' className="container d-flex my-5">
                 <div className="row align-items-center">
                     <div className="col-md-6 col-12">
                         <div className="login-left">

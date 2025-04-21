@@ -4,9 +4,7 @@ const API_BASE = import.meta.env.VITE_BACKEND_API;
 
 export const fetchProducts = () => axios.get(`${API_BASE}/show-product`);
 export const deleteProduct = (id) => axios.delete(`${API_BASE}/product-delete/${id}`);
-export const deleteCategory = async (id) => {
-  return await axios.delete(`${API_BASE}/delete-category/${id}`);
-};
+export const deleteCategory = async (id) =>  await axios.delete(`${API_BASE}/category-delete/${id}`);
 
 export const fetchCategory = () => axios.get(`${API_BASE}/show-product_category`);
 /**

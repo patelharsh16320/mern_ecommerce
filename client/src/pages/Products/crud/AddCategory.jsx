@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { CiEdit } from "react-icons/ci";
 import { FaRegTrashAlt } from "react-icons/fa";
 
-const AddProduct = () => {
+const AddCategory = () => {
   const [form, setForm] = useState({
     name: '',
     desc: ''
@@ -17,6 +17,9 @@ const AddProduct = () => {
   const [loading, setLoading] = useState(false);
   const [returnData, setReturnData] = useState();
   const [deletingId, setDeletingId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
   const navigate = useNavigate();
 
   const loadProducts = () => {
@@ -36,6 +39,7 @@ const AddProduct = () => {
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
+  // create category 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -43,10 +47,10 @@ const AddProduct = () => {
     try {
       const payload = { ...form };
       const response = await createCategory(payload);
-      console.log('response', response.data);
+      console.log('response.data', response.data);
       setReturnData(response.data);
 
-      if (response.status === 201) {
+      if (returnData.status === 201) {
         setForm({ name: '', desc: '' });
         toast.success(returnData.message);
         navigate('/admin/addcategery');
@@ -60,79 +64,81 @@ const AddProduct = () => {
       setLoading(false);
     }
   };
-  // Handle delete
+
+  // delete category
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this category?')) return;
 
     try {
       setDeletingId(id);
       const response = await deleteCategory(id);
-      console.log('response', response.data);
-      if (response.status !== 201) {
+      if (response.data.status === 201) {
         toast.success(response.data.message);
         setCategory(prev => prev.filter(p => p.id !== id));
-      }else {
+      } else {
         toast.error(response.data.message);
       }
     } catch (err) {
       toast.error(err?.response?.data?.message || 'Failed to delete category');
-      console.error('Delete error:', err);
     } finally {
       setDeletingId(null);
     }
   };
 
+  // Calculate pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = Category.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(Category.length / itemsPerPage);
 
+  const handlePageChange = (pageNum) => {
+    setCurrentPage(pageNum);
+  };
 
   return (
-    // <section id='main' className="container d-flex align-items-center">
-    //   <div className=''>
-    //     <h2>Add New Product Category</h2>
-    //     <form onSubmit={handleSubmit} className="row g-3 ">
-    //       <div className="col-md-6">
-    //         <label className="form-label">Name</label>
-    //         <input
-    //           type="text"
-    //           name="name"
-    //           value={form.name}
-    //           onChange={handleChange}
-    //           className="form-control"
-    //           required
-    //         />
-    //       </div>
-
-    //       <div className="col-md-6">
-    //         <label className="form-label">Description</label>
-    //         <textarea
-    //           name="desc"
-    //           value={form.desc}
-    //           onChange={handleChange}
-    //           className="form-control"
-    //         />
-    //       </div>
-
-    //       <div className="col-12">
-    //         <button type="submit" className="btn btn-primary" disabled={loading}>
-    //           {loading ? 'Saving…' : 'Create Category'}
-    //         </button>
-    //       </div>
-    //     </form>
-    //   </div>
-    // </section>
     <>
-      <section className='container pb-5'>
-        <h1>Show All Products</h1>
+      <section id='main' className='container pb-5'>
+        <h1>Show All Products</h1>        
+        <div className='d-flex justify-content-between mb-3 align-items-center'>
+          <nav>
+            <h4>Total Category: {Category.length}</h4>
+            <ul className="pagination">
+              {[...Array(totalPages)].map((_, index) => (
+                <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                  <button className="page-link" onClick={() => handlePageChange(index + 1)}>
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-        <div className='d-flex justify-content-between mb-3'>
-          <h4>Total Category: {Category.length}</h4>
+          <div className="d-flex align-items-center">
+            <label className="me-2">Show:</label>
+            <input
+              type="number"
+              min="1"
+              max={Category.length}
+              value={itemsPerPage}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="form-control me-2"
+              style={{ width: "80px" }}
+            />
+            <span>entries</span>
+          </div>
+
           <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
             Add Category
           </button>
+        </div>
+        <div className='d-flex justify-content-between mb-3'>
           <div className="modal fade" id="addCategoryModal" tabIndex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
             <div className="modal-dialog">
               <form className="modal-content" onSubmit={handleSubmit}>
                 <div className="modal-header">
-                  <h5 className="modal-title" id="addCategoryModalLabel">Add New Category</h5>
                   <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
@@ -174,14 +180,15 @@ const AddProduct = () => {
             <tr>
               <th>Index</th>
               <th>Title</th>
-              <th>Price</th>
+              <th>Desc</th>
               <th>Update</th>
               <th>Delete</th>
             </tr>
           </thead>
           <tbody>
-            {Category.map((props, index) => (
+            {currentItems.map((props, index) => (
               <tr key={index}>
+                <th>{indexOfFirstItem + index + 1}</th>
                 <th>{index + 1}</th>
                 <th>{props.name}</th>
                 <td>{props.desc}</td>
@@ -207,4 +214,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default AddCategory;
