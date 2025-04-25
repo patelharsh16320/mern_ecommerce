@@ -219,6 +219,12 @@ button.dark-clr:hover, button.dark-clr:active {
   border: 1px solid #000;
 }
 
+.active button.dark-clr {
+  background: #fff;
+  color: #000;
+  border: 1px solid #000;
+}
+
 button {
   text-decoration: none;
   max-width: auto;

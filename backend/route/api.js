@@ -7,12 +7,14 @@ const {
 const { getAllData } = require('../controllers/modelController');
 const {
     createProduct,
+    UpdateProduct,
     createProductCategory,
     createProductDiscount,
     createProductInventory,
     createProductSession,
     DeleteProduct,
-    DeleteCategory
+    DeleteCategory,
+    UpdateCategory
 } = require('../controllers/productController');
 const {
     createUser,
@@ -33,8 +35,12 @@ router.route('/create-product-category').post(createProductCategory);
 router.route('/create-product-discount').post(createProductDiscount);
 router.route('/create-product-inventory').post(createProductInventory);
 router.route('/create-product-session').post(createProductSession);
+
 router.route('/product-delete/:id').delete(DeleteProduct);
 router.route('/category-delete/:id').delete(DeleteCategory);
+
+router.route('/update-category').post(UpdateCategory);
+router.route('/update-product').post(UpdateProduct);
 
 // Users 
 router.route('/create-user').post(createUser);

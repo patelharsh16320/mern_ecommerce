@@ -266,7 +266,11 @@ button.dark-clr {
         border: 1px solid $dark-clr;
     }
 }
-
+.active button.dark-clr {
+    background: $white-clr;
+    color: $dark-clr ;
+    border: 1px solid $dark-clr ;
+}
 button {
     text-decoration: none;
     max-width: auto;
