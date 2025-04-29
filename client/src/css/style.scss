@@ -409,3 +409,9 @@ body {
 }
 
 // Footer End
+// Contact Start
+.contact-section,
+.about-section {
+    @include positionCenter();
+}
+// Contact End

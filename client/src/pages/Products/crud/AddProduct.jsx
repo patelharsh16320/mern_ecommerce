@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createProduct } from './ApiCommon';
+import { createProduct, fetchCategory } from './ApiCommon';
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -16,6 +16,16 @@ const AddProduct = () => {
       count: ''
     }
   });
+  const [categoryData, setcategoryData] = useState([]);
+
+  const loadCategory = async () => {
+    const res = await fetchCategory();
+    setcategoryData(res.data.users || []);
+  }
+
+  useEffect(() => {
+    loadCategory();
+  }, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,22 +59,21 @@ const AddProduct = () => {
           count: parseInt(formData.rating.count, 10)
         }
       };
-console.log('payload',payload)
       await createProduct(payload);
       alert('Product created successfully!');
       navigate('/admin/showproducts');
     } catch (err) {
-      console.error('Failed to create product:', err);
       alert('Failed to create product. See console for details.');
     }
   };
 
   return (
     <section id='main'>
-      <div className="add-product">
+      <div className="add-product px-5">
         <h2>Add New Product</h2>
         <form onSubmit={handleSubmit}>
           <input
+            className='form-control mb-3'
             name="title"
             value={formData.title}
             onChange={handleChange}
@@ -72,6 +81,7 @@ console.log('payload',payload)
             required
           />
           <input
+            className='form-control mb-3'
             name="price"
             value={formData.price}
             onChange={handleChange}
@@ -80,27 +90,34 @@ console.log('payload',payload)
             required
           />
           <textarea
+            className='form-control mb-3'
             name="description"
             value={formData.description}
             onChange={handleChange}
             placeholder="Description"
             required
           />
+          <div class="dropdown mb-3">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Select Category
+            </button>
+            <ul class="dropdown-menu">
+              {categoryData.map((props, index) => (
+                <li key={index}><a class="dropdown-item">{props.name}</a></li>
+              ))}
+            </ul>
+          </div>
           <input
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            placeholder="Category"
-            required
-          />
-          <input
+            className='form-control mb-3'
             name="image"
+            type='file'
             value={formData.image}
             onChange={handleChange}
             placeholder="Image URL"
             required
           />
           <input
+            className='form-control mb-3'
             name="rate"
             value={formData.rating.rate}
             onChange={handleChange}
@@ -110,6 +127,7 @@ console.log('payload',payload)
             required
           />
           <input
+            className='form-control mb-3'
             name="count"
             value={formData.rating.count}
             onChange={handleChange}
@@ -117,7 +135,7 @@ console.log('payload',payload)
             type="number"
             required
           />
-          <button type="submit">Add Product</button>
+          <button type="submit">Create Product</button>
         </form>
       </div>
     </section>

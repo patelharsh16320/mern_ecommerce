@@ -1,10 +1,6 @@
 import React from 'react'
 import "bootstrap/dist/css/bootstrap.min.css";
-import { FaCar } from "react-icons/fa";
-import { SiFsecure } from "react-icons/si";
-import { GiReceiveMoney } from "react-icons/gi";
-import { RiSecurePaymentFill } from "react-icons/ri";
-
+import { Link } from 'react-router-dom';
 
 const Home = () => {
     return (
@@ -14,9 +10,7 @@ const Home = () => {
                 <div className="container main-section">
                     <h1><b>Grow</b> <span className='green'>Plants</span> for a better Environment</h1>
                     <div className='btn-section'>
-                        <button className='btn-design'><a href='#' className='text-decoration-none'>Contact Us</a></button>
-                    </div>
-
+                        <button className='btn-design'> <Link to='/contact'>Contact Us</Link></button> </div>
                 </div>
             </section>
 
@@ -33,7 +27,7 @@ const Home = () => {
                         </div>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, veniam consectetur, sit corporis reiciendis officia ut numquam error ducimus illum asperiores maxime commodi, temporibus velit nam praesentium adipisci quos nostrum?</p>
                         <div className='btn-section'>
-                            <button className='btn-design'><a href='#' className='text-decoration-none'>Know More</a></button>
+                            <button className='btn-design'> <Link to='/about'>Know More</Link></button> 
                         </div>
                     </div>
                 </div>

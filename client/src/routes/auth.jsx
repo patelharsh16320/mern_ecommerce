@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "../pages/Home"
 import About from "../pages/About"
+import Contact from "../pages/Contact"
 import Error from "../pages/Error";
 import Product from "../pages/Products/AllProducts";
 import SingleProduct from "../pages/Products/SingleProduct";
@@ -19,7 +20,7 @@ const auth = () => {
         {/* pages  */}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        {/* <Route path="/contact" element={<Contact/>} /> */}
+        <Route path="/contact" element={<Contact/>} />
         <Route path="/product" element={<Product />} />
         <Route path="/product/:id" element={<SingleProduct />} />
         <Route path="/checkout" element={<Checkout />} />

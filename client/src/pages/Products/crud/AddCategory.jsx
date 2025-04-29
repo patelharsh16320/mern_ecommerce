@@ -101,7 +101,7 @@ const AddCategory = () => {
   const totalPages = Math.ceil(Category.length / itemsPerPage);
 
   return (
-    <section id='main' className='container mb-5'>
+    <section id='' className='container my-5'>
       <h1>Show All Categories</h1>
 
       <div className='d-flex justify-content-between mb-3 align-items-center'>

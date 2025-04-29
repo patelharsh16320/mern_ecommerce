@@ -1,33 +1,46 @@
 const conn = require('../utils/db');
 
 //! create product 
+//! create product 
 const createProduct = async (req, res) => {
     try {
-        const { title, price, description, category, image, rating } = req.body;
+        const { title, price, description, image, rating, category_id, inventory_id, discount_id } = req.body;
+
         console.log('title', title);
         console.log('price', price);
         console.log('description', description);
-        console.log('category', category);
         console.log('image', image);
         console.log('rating', rating);
+        console.log('category_id', category_id);
+        console.log('inventory_id', inventory_id);
+        console.log('discount_id', discount_id);
 
         const query = `
-            INSERT INTO products (
-                title, price, description, category, image, rating_rate, rating_count, created_at, modified_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+            INSERT INTO product (
+                id, title, price, description, image, rating_rate, rating_count, 
+                category_id, inventory_id, discount_id, created_at, modified_at, deleted_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?)
         `;
 
         const [result] = await conn.promise().query(query, [
+            null,                // id (auto-increment assumed)
             title,
             price,
-            description,
-            category,
+            description,     
             image,
             rating?.rate || null,
-            rating?.count || null
+            rating?.count || null,
+            category_id || null,
+            inventory_id || null,
+            discount_id || null,
+            null                 // deleted_at initially null
         ]);
 
-        res.status(201).json({ message: 'Product created successfully', product_id: result.insertId, status: 201 });
+        res.status(201).json({ 
+            message: 'Product created successfully', 
+            product_id: result.insertId, 
+            status: 201 
+        });
 
     } catch (err) {
         console.error('Error while inserting product:', err);
@@ -38,6 +51,7 @@ const createProduct = async (req, res) => {
         });
     }
 };
+
 
 //! create product discount 
 const createProductDiscount = async (req, res) => {
@@ -68,8 +82,7 @@ const UpdateProduct = async (req, res) => {
             id,
             title,
             price,
-            description,
-            category,
+            description,            
             image,
             rating_rate,
             rating_count,
@@ -91,7 +104,6 @@ const UpdateProduct = async (req, res) => {
                 title = ?,
                 price = ?,
                 description = ?,
-                category = ?,
                 image = ?,
                 rating_rate = ?,
                 rating_count = ?,
@@ -107,7 +119,6 @@ const UpdateProduct = async (req, res) => {
             title,
             price,
             description,
-            category,
             image,
             rating_rate,
             rating_count,

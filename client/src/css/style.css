@@ -347,4 +347,11 @@ body .footer-section {
 }
 body .footer-section a {
   color: #fff;
+}
+
+.contact-section,
+.about-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }/*# sourceMappingURL=style.css.map */

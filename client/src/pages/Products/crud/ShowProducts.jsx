@@ -49,6 +49,7 @@ const ShowProducts = () => {
                         <tr>
                             <th>Index</th>
                             <th>Title</th>
+                            <th>Image</th>
                             <th>Price</th>
                             <th>Update</th>
                             <th>Delete</th>
@@ -59,10 +60,18 @@ const ShowProducts = () => {
                             <tr key={index}>
                                 <th>{index + 1}</th>
                                 <th>{props.title}</th>
+                                <th><img
+                                    src={props.image}
+                                    width="50px"
+                                    class="img-fluid rounded-top"
+                                    alt={props.image}
+                                />
+                                </th>
                                 <td>{props.price}</td>
-                                <td>         <button>
-                                    <Link to={`/admin/editproduct/${props.id}`}><CiEdit /></Link>
-                                </button>
+                                <td>
+                                    <button>
+                                        <Link to={`/admin/editproduct/${props.id}`}><CiEdit /></Link>
+                                    </button>
                                 </td>
                                 <td>
                                     <button
